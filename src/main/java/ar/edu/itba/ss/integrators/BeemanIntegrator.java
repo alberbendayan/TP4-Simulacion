@@ -1,0 +1,28 @@
+package ar.edu.itba.ss.integrators;
+
+import ar.edu.itba.ss.Oscillator;
+
+public class BeemanIntegrator implements Integrator {
+
+    private Oscillator osc;
+    private double dt;
+    private double aPrev;
+
+    public void initialize(Oscillator osc, double x, double v, double dt) {
+        this.osc = osc;
+        this.dt = dt;
+        this.aPrev = osc.acceleration(x, v);
+    }
+
+    public double[] step(double x, double v, double t) {
+        double a = osc.acceleration(x, v);
+        double xNext = x + v * dt + (2.0 / 3.0 * a - 1.0 / 6.0 * aPrev) * dt * dt;
+        double aNext = osc.acceleration(xNext, v);  // v provisional
+
+        double vNext = v + (1.0 / 3.0 * aNext + 5.0 / 6.0 * a - 1.0 / 6.0 * aPrev) * dt;
+
+        aPrev = a;
+        return new double[]{xNext, vNext};
+    }
+
+}
