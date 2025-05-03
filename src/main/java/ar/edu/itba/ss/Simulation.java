@@ -3,6 +3,7 @@ package ar.edu.itba.ss;
 import ar.edu.itba.ss.integrators.Integrator;
 
 import java.io.*;
+import java.util.Locale;
 
 public class Simulation {
 
@@ -29,7 +30,7 @@ public class Simulation {
 
             while (t <= tMax) {
                 double analytical = osc.analytical(t);
-                writer.printf("%.8f\t%.8f\t%.8f\t%.8f%n", t, x, v, analytical);
+                writer.printf(Locale.US,"%.8f\t%.8f\t%.8f\t%.8f%n", t, x, v, analytical);
                 double[] next = integrator.step(x, v, t);
                 x = next[0];
                 v = next[1];
