@@ -25,4 +25,8 @@ public class Oscillator {
                 (v0 + gamma_m * x0) / omega_d * Math.sin(omega_d * t));
     }
 
+    public static interface CoupledIntegrator {
+        void initialize(CoupledOscillators osc, double dt);
+        void step(CoupledOscillators osc, double t, double dt);
+    }
 }

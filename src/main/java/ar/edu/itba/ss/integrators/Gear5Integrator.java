@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.integrators;
 
+import ar.edu.itba.ss.CoupledOscillators;
 import ar.edu.itba.ss.Oscillator;
 
 public class Gear5Integrator implements Integrator {
@@ -45,4 +46,8 @@ public class Gear5Integrator implements Integrator {
         return new double[]{r[0], r[1]};
     }
 
+    public static interface CoupledIntegrator {
+        void initialize(CoupledOscillators osc, double dt);
+        void step(CoupledOscillators osc, double t, double dt);
+    }
 }
