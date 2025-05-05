@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+import os
 
 
 def cargar_datos(nombre_archivo):
@@ -13,12 +15,21 @@ def cargar_datos(nombre_archivo):
 def error_cuadratico_medio(num, ana):
     return np.mean((num - ana) ** 2)
 
+if len(sys.argv) != 2:
+    print("Uso: un run ej1A.py <valor>")
+    sys.exit(1)
+
+valor = sys.argv[1]  # Por ejemplo: "0.0001"
+base_path = f"../results/{valor}"
+if not os.path.exists(base_path):
+    print(f"El directorio '{base_path}' no existe.")
+    sys.exit(1)
 
 # Archivos de salida de los métodos
 archivos = {
-    "Gear predictor Corrector": "../results/output_gear.txt",
-    "Euler-Predictor-Corrector Modified": "../results/output_beeman.txt",
-    "Verlet": "../results/output_verlet.txt",
+    "Gear predictor Corrector": f"{base_path}/output_gear.txt",
+    "Euler-Predictor-Corrector Modified": f"{base_path}/output_beeman.txt",
+    "Verlet": f"{base_path}/output_verlet.txt",
 }
 
 # Colores
@@ -40,17 +51,9 @@ plt.plot(t, ana, label="Analítica", color="blue")
 
 plt.xlabel("Tiempo [s]")
 plt.ylabel("Posición [m]")
-plt.title("Comparación general")
 plt.legend()
 plt.grid(True)
 
 plt.tight_layout()
 plt.savefig("comparacion_metodos.png", dpi=300)
 plt.show()
-
-# Imprimir errores
-print("\nErrores cuadráticos medios (ECM):")
-for nombre, archivo in archivos.items():
-    _, num, ana = cargar_datos(archivo)
-    ecm = error_cuadratico_medio(num, ana)
-    print(f"{nombre}: {ecm:.6e}")
