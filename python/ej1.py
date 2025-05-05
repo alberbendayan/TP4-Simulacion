@@ -16,9 +16,9 @@ def error_cuadratico_medio(num, ana):
 
 # Archivos de salida de los métodos
 archivos = {
-    "Gear predictor Corrector": "../output_gear.txt",
-    "Euler-Predictor-Corrector Modified": "../output_beeman.txt",
-    "Verlet": "../output_verlet.txt",
+    "Gear predictor Corrector": "../results/output_gear.txt",
+    "Euler-Predictor-Corrector Modified": "../results/output_beeman.txt",
+    "Verlet": "../results/output_verlet.txt",
 }
 
 # Colores
