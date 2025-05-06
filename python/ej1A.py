@@ -19,7 +19,7 @@ if len(sys.argv) != 2:
     print("Uso: un run ej1A.py <valor>")
     sys.exit(1)
 
-valor = sys.argv[1]  # Por ejemplo: "0.0001"
+valor = sys.argv[1]
 base_path = f"../results/{valor}"
 if not os.path.exists(base_path):
     print(f"El directorio '{base_path}' no existe.")
@@ -53,7 +53,7 @@ plt.xlabel("Tiempo [s]")
 plt.ylabel("Posición [m]")
 plt.legend()
 plt.grid(True)
-
+os.makedirs("../results/graphics", exist_ok=True)
 plt.tight_layout()
-plt.savefig("comparacion_metodos.png", dpi=300)
+plt.savefig(f"../results/graphics/comparacion_metodos_{valor}.png", dpi=300)
 plt.show()

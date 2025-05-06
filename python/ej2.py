@@ -4,9 +4,8 @@ import numpy as np
 import re
 
 # 📁 Directorio donde están los resultados
-RESULTS_DIR = '../results/ej2/'
+RESULTS_DIR = '../results/ej2_500/'
 
-# 🛠 Regex para encontrar los archivos tipo omega_2.5.txt
 file_pattern = re.compile(r'coupled_omega_([\d.]+)\.txt')
 
 frequencies = []
@@ -17,6 +16,7 @@ for filename in os.listdir(RESULTS_DIR):
     match = file_pattern.match(filename)
     if match:
         omega = float(match.group(1))
+        print(f'Processing {filename}... and omega = {omega}')
         frequencies.append(omega)
         
         filepath = os.path.join(RESULTS_DIR, filename)
@@ -26,7 +26,7 @@ for filename in os.listdir(RESULTS_DIR):
             for line in f:
                 parts = line.strip().split()
                 if len(parts) >= 2:
-                    y = float(parts[1])  # y500
+                    y = float(parts[1])
                     y_values.append(abs(y))
         
         max_amp = max(y_values)

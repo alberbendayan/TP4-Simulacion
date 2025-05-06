@@ -17,10 +17,10 @@ def error_cuadratico_medio(num, ana):
 
 
 if len(sys.argv) != 2:
-    print("Uso: un run ej1A.py <valor>")
+    print("Uso: un run ej1B.py <valor>")
     sys.exit(1)
 
-valor = sys.argv[1]  # Por ejemplo: "0.0001"
+valor = sys.argv[1] 
 base_path = f"../results/{valor}"
 if not os.path.exists(base_path):
     print(f"El directorio '{base_path}' no existe.")
@@ -45,8 +45,6 @@ colores = {
 nombres_metodos = list(archivos.keys())
 ecms = []
 
-# Imprimir errores
-print("\nErrores cuadráticos medios (ECM):")
 for nombre, archivo in archivos.items():
     _, num, ana = cargar_datos(archivo)
     ecm = error_cuadratico_medio(num, ana)
@@ -63,7 +61,7 @@ plt.grid(axis='y')
 plt.xticks(rotation=20)
 plt.yscale("log")
 
-# Guardar y mostrar
+os.makedirs("../results/graphics", exist_ok=True)
 plt.tight_layout()
-plt.savefig("ecm_metodos.png", dpi=300)
+plt.savefig(f"../results/graphics/ecm_metodos_{valor}.png", dpi=300)
 plt.show()

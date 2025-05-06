@@ -71,11 +71,11 @@ def main():
     plt.yscale("log")
     plt.xlabel("Paso de integración dt (log)")
     plt.ylabel("Error cuadrático medio (log)")
-    plt.title("Disminución del error con respecto al paso dt")
     plt.legend()
     plt.grid(True, which='both', linestyle='--', linewidth=0.5)
     plt.tight_layout()
-    plt.savefig("error_vs_dt.png", dpi=300)
+    os.makedirs("../results/graphics", exist_ok=True)
+    plt.savefig("../results/graphics/error_vs_dt.png", dpi=300)
     plt.show()
 
 
