@@ -32,7 +32,7 @@ public class SimulationCoupled {
                 double[] pos = osc.getPositions();
                 double[] vel = osc.getVelocities();
                 // Guardamos la posición y velocidad de una partícula central (por ejemplo, i=500)
-                writer.printf(Locale.US, "%.8f\t%.8f\t%.8f%n", t, pos[500], vel[500]);
+                writer.printf(Locale.US, "%.8f\t%.8f\t%.8f%n", t, pos[999], vel[999]);
                 integrator.step(osc, t, dt);
                 t += dt;
             }
