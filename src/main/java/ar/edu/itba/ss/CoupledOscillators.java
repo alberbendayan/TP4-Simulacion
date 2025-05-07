@@ -29,8 +29,8 @@ public class CoupledOscillators {
         for (int i = 0; i < N; i++) {
             double yi = positions[i];
             double vi = velocities[i];
-            double yiMinus = (i == 0) ? 0.0 : positions[i - 1];
-            double yiPlus = (i == N - 1) ? A * Math.sin(omega * t) : positions[i + 1];
+            double yiMinus = (i == 0) ? A * Math.sin(omega * t) : positions[i - 1];
+            double yiPlus = (i == N - 1) ? 0.0 : positions[i + 1];
             accelerations[i] = (-k * (2 * yi - yiMinus - yiPlus) - gamma * vi) / m;
         }
     }
