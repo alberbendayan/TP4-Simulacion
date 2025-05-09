@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import os
+from utils import read_config, validate_simulation_dir
 
 
 def cargar_datos(nombre_archivo):
@@ -15,21 +16,22 @@ def cargar_datos(nombre_archivo):
 def error_cuadratico_medio(num, ana):
     return np.mean((num - ana) ** 2)
 
-if len(sys.argv) != 2:
-    print("Uso: un run ej1A.py <valor>")
-    sys.exit(1)
+# Get simulation directory from command line
+sim_dir = validate_simulation_dir()
 
-valor = sys.argv[1]
-base_path = f"../results/{valor}"
-if not os.path.exists(base_path):
-    print(f"El directorio '{base_path}' no existe.")
+# Read configuration
+config = read_config(sim_dir)
+
+# Verify this is a single oscillator simulation
+if config['oscillatorType'] != 'single':
+    print("Error: This script is for single oscillator simulations")
     sys.exit(1)
 
 # Archivos de salida de los métodos
 archivos = {
-    "Gear predictor Corrector": f"{base_path}/output_gear.txt",
-    "Euler-Predictor-Corrector Modified": f"{base_path}/output_beeman.txt",
-    "Verlet": f"{base_path}/output_verlet.txt",
+    "Gear predictor Corrector": os.path.join(sim_dir, "output_gear.txt"),
+    "Euler-Predictor-Corrector Modified": os.path.join(sim_dir, "output_beeman.txt"),
+    "Verlet": os.path.join(sim_dir, "output_verlet.txt"),
 }
 
 # Colores
@@ -53,7 +55,13 @@ plt.xlabel("Tiempo [s]")
 plt.ylabel("Posición [m]")
 plt.legend()
 plt.grid(True)
-os.makedirs("../results/graphics", exist_ok=True)
+
+# Create graphics directory in results
+graphics_dir = os.path.join(os.path.dirname(os.path.dirname(sim_dir)), "graphics")
+os.makedirs(graphics_dir, exist_ok=True)
+
+# Save plot with timestamp from simulation directory
+timestamp = os.path.basename(sim_dir)
 plt.tight_layout()
-plt.savefig(f"../results/graphics/comparacion_metodos_{valor}.png", dpi=300)
+plt.savefig(os.path.join(graphics_dir, f"comparacion_metodos_{timestamp}.png"), dpi=300)
 plt.show()

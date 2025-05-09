@@ -1,8 +1,8 @@
 import os
 import sys
-import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import read_config
 
 
 def cargar_datos(path_archivo):
@@ -17,20 +17,10 @@ def error_cuadratico_medio(num, ana):
     return np.mean((num - ana) ** 2)
 
 
-def extraer_dt_de_nombre(nombre_dir):
-    # Intenta extraer dt de nombres tipo "dt_0.01", "dt0.001", etc.
-    for parte in nombre_dir.replace('-', '_').split('_'):
-        try:
-            return float(parte)
-        except ValueError:
-            continue
-    raise ValueError(f"No se pudo extraer dt del nombre del directorio: {nombre_dir}")
-
-
 def main():
-    parser = argparse.ArgumentParser(description="Estudia cómo disminuye el ECM al disminuir dt.")
-    parser.add_argument("directorios", nargs='+', help="Lista de carpetas con archivos output_*.txt")
-    args = parser.parse_args()
+    if len(sys.argv) < 2:
+        print("Usage: python ej1C.py <simulation_directory1> [simulation_directory2 ...]")
+        sys.exit(1)
 
     metodos = {
         "Gear predictor Corrector": "output_gear.txt",
@@ -41,21 +31,37 @@ def main():
     errores_por_metodo = {nombre: [] for nombre in metodos}
     dts = []
 
-    for directorio in args.directorios:
+    for sim_dir in sys.argv[1:]:
+        if not os.path.exists(sim_dir):
+            print(f"Directory '{sim_dir}' does not exist")
+            continue
+
         try:
-            dt = extraer_dt_de_nombre(os.path.basename(directorio))
+            # Read configuration
+            config = read_config(sim_dir)
+            
+            # Verify this is a single oscillator simulation
+            if config['oscillatorType'] != 'single':
+                print(f"Error: Directory '{sim_dir}' is not a single oscillator simulation")
+                continue
+
+            dt = config['simulation']['dt']
             dts.append(dt)
 
             for nombre_metodo, archivo in metodos.items():
-                path_archivo = os.path.join(directorio, archivo)
+                path_archivo = os.path.join(sim_dir, archivo)
                 numerica, analitica = cargar_datos(path_archivo)
                 ecm = error_cuadratico_medio(numerica, analitica)
                 errores_por_metodo[nombre_metodo].append(ecm)
 
         except Exception as e:
-            print(f"Error en '{directorio}': {e}", file=sys.stderr)
+            print(f"Error processing '{sim_dir}': {e}", file=sys.stderr)
 
-    # Ordenar por dt creciente
+    if not dts:
+        print("No valid simulation directories found")
+        sys.exit(1)
+
+    # Sort by dt creciente
     dts, errores_ordenados = zip(*sorted(zip(dts, zip(*[errores_por_metodo[m] for m in metodos]))))
     dts = np.array(dts)
     errores_por_metodo = {
@@ -73,9 +79,13 @@ def main():
     plt.ylabel("Error cuadrático medio (log)")
     plt.legend()
     plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+    # Create graphics directory in results
+    graphics_dir = os.path.join(os.path.dirname(os.path.dirname(sim_dir)), "graphics")
+    os.makedirs(graphics_dir, exist_ok=True)
+
     plt.tight_layout()
-    os.makedirs("../results/graphics", exist_ok=True)
-    plt.savefig("../results/graphics/error_vs_dt.png", dpi=300)
+    plt.savefig(os.path.join(graphics_dir, "error_vs_dt.png"), dpi=300)
     plt.show()
 
 
