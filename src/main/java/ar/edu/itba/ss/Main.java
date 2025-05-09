@@ -50,28 +50,32 @@ public class Main {
                 saveSingleOscillatorConfig(directory, dt, tMax);
             } else if (args[0].equals("2")) {
                 if (args.length < 3) {
-                    System.out.println("Falta el segundo argumento: omega. Ej: java Main 2 2.5 1e4");
+                    System.out.println("Falta el segundo argumento: omega. Ej: java Main 2 2.5 1e4 [saveAll]");
                     return;
                 }
 
                 double omega;
                 double k;
+                boolean saveAll = false;
                 try {
                     omega = Double.parseDouble(args[1]);
                     k = Double.parseDouble(args[2]);
+                    if (args.length > 3) {
+                        saveAll = Boolean.parseBoolean(args[3]);
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("El segundo argumento debe ser un número válido para omega.");
                     return;
                 }
 
-                DecimalFormat df = new DecimalFormat("0000.0000", new DecimalFormatSymbols(Locale.US));
-                String directory = outputDir + "/ej2";
+                String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+                String directory = String.format(Locale.US, "%s/ej2/%s", outputDir, timestamp);
                 Files.createDirectories(Paths.get(directory));
-                String filename = directory + "/coupled_omega_" + df.format(omega) + "_k_" + df.format(k) + ".txt";
+                String filename = directory + "/coupled_omega_" + String.format(Locale.US, "%.4f", omega) + "_k_" + String.format(Locale.US, "%.4f", k) + ".txt";
 
                 CoupledOscillators coupledOsc = new CoupledOscillators(Config.N, Config.M2, k, Config.GAMMA2, Config.A2,
                         omega);
-                new SimulationCoupled(coupledOsc, dt2, tMax2, new VerletCoupledIntegrator(), filename).run();
+                new SimulationCoupled(coupledOsc, dt2, tMax2, new VerletCoupledIntegrator(), filename, saveAll).run();
 
                 // Save coupled oscillators config
                 saveCoupledOscillatorsConfig(directory, dt2, tMax2, k, omega);

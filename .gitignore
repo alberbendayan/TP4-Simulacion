@@ -42,3 +42,5 @@ build/
 output.txt
 results/
 *.png
+.venv/
+*.pyc

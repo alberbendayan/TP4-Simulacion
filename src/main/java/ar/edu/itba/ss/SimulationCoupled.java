@@ -16,13 +16,16 @@ public class SimulationCoupled {
     private final double dt, tMax;
     private final CoupledIntegrator integrator;
     private final String outputFile;
+    private final boolean saveAll;
 
-    public SimulationCoupled(CoupledOscillators osc, double dt, double tMax, CoupledIntegrator integrator, String outputFile) {
+    public SimulationCoupled(CoupledOscillators osc, double dt, double tMax, CoupledIntegrator integrator,
+            String outputFile, boolean saveAll) {
         this.osc = osc;
         this.dt = dt;
         this.tMax = tMax;
         this.integrator = integrator;
         this.outputFile = outputFile;
+        this.saveAll = saveAll;
     }
 
     public void run() {
@@ -39,8 +42,17 @@ public class SimulationCoupled {
                 while (t <= tMax) {
                     double[] pos = osc.getPositions();
                     double[] vel = osc.getVelocities();
-                    // Guardamos la posición y velocidad de una partícula central (por ejemplo, i=500)
-                    writer.printf(Locale.US, "%.8f\t%.8f\t%.8f%n", t, pos[999], vel[999]);
+                    if (saveAll) {
+                        // Save time and all particle positions
+                        writer.printf(Locale.US, "%.8f", t);
+                        for (int i = 0; i < pos.length; i++) {
+                            writer.printf(Locale.US, "\t%.8f", pos[i]);
+                        }
+                        writer.println();
+                    } else {
+                        // Save only time and last particle position
+                        writer.printf(Locale.US, "%.8f\t%.8f\t%.8f%n", t, pos[pos.length - 1], vel[pos.length - 1]);
+                    }
                     integrator.step(osc, t, dt);
                     t += dt;
                 }
