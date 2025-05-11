@@ -1,25 +1,29 @@
 package ar.edu.itba.ss;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 public class Config {
+    private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
 
     // Simulation parameters
-    static final double DT = 0.01;
-    static final double T_MAX = 5;
+    static final BigDecimal DT = new BigDecimal("1e-5");
+    static final BigDecimal T_MAX = new BigDecimal("5");
     static final String OUTPUT_DIR = "results";
 
     // Single oscillator parameters
-    static final double M = 70.0;
-    static final double K = 1e4;
-    static final double GAMMA = 100.0;
-    static final double X0 = 1.0;
-    static final double V0 = -X0 * GAMMA / (2 * M);
+    static final BigDecimal M = new BigDecimal("70.0");
+    static final BigDecimal K = new BigDecimal("1e4");
+    static final BigDecimal GAMMA = new BigDecimal("100.0");
+    static final BigDecimal X0 = new BigDecimal("1.0");
+    static final BigDecimal V0 = X0.multiply(GAMMA).divide(M.multiply(BigDecimal.valueOf(2)), MC).negate();
 
     // Coupled oscillators parameters
-    static final int N = 1000;
-    static final double M2 = 0.00021;
-    static final double GAMMA2 = 0.0003;
-    static final double A2 = 1e-2;
-    static final double DT2 = 1e-4;
-    static final double T_MAX2 = 300.0;
-
+    static final int N = 100;
+    static final BigDecimal M2 = new BigDecimal("0.00021");
+    static final BigDecimal GAMMA2 = new BigDecimal("0.0003");
+    static final BigDecimal A2 = new BigDecimal("1e-2");
+    static final BigDecimal DT2 = new BigDecimal("1e-4");
+    static final BigDecimal T_MAX2 = new BigDecimal("300.0");
 }

@@ -1,48 +1,52 @@
 package ar.edu.itba.ss.integrators;
 
 import ar.edu.itba.ss.CoupledOscillators;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class VerletCoupledIntegrator implements CoupledIntegrator {
+    private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
 
-    private double[] prevPositions;
+    private BigDecimal[] prevPositions;
 
     @Override
-    public void initialize(CoupledOscillators osc, double dt) {
+    public void initialize(CoupledOscillators osc, BigDecimal dt) {
         int N = osc.getN();
-        double[] x = osc.getPositions();
-        double[] v = osc.getVelocities();
-        double[] a = osc.getAccelerations();
-        prevPositions = new double[N];
+        BigDecimal[] x = osc.getPositions();
+        BigDecimal[] v = osc.getVelocities();
+        BigDecimal[] a = osc.getAccelerations();
+        prevPositions = new BigDecimal[N];
+        BigDecimal dt2 = dt.multiply(dt);
+        
         for (int i = 0; i < N; i++) {
-            prevPositions[i] = x[i] - v[i] * dt + 0.5 * a[i] * dt * dt;
+            prevPositions[i] = x[i].subtract(v[i].multiply(dt))
+                                 .add(a[i].multiply(dt2).multiply(BigDecimal.valueOf(0.5)));
         }
     }
 
     @Override
-    public void step(CoupledOscillators osc, double t, double dt) {
+    public void step(CoupledOscillators osc, BigDecimal t, BigDecimal dt) {
         int N = osc.getN();
-        double[] x = osc.getPositions();
-        double[] a = osc.getAccelerations();
-        double[] newPos = new double[N];
-
-        // // Depuración: Imprimir las aceleraciones antes de actualizar
-        // System.out.println("Aceleraciones: ");
-        // for (int i = 0; i < N; i++) {
-        //     System.out.println("a[" + i + "] = " + a[i]);
-        // }
+        BigDecimal[] x = osc.getPositions();
+        BigDecimal[] a = osc.getAccelerations();
+        BigDecimal[] newPos = new BigDecimal[N];
+        BigDecimal dt2 = dt.multiply(dt);
 
         for (int i = 0; i < N; i++) {
-            newPos[i] = 2 * x[i] - prevPositions[i] + a[i] * dt * dt;
+            newPos[i] = BigDecimal.valueOf(2).multiply(x[i])
+                                   .subtract(prevPositions[i])
+                                   .add(a[i].multiply(dt2));
         }
 
-        double[] newVel = new double[N];
+        BigDecimal[] newVel = new BigDecimal[N];
         for (int i = 0; i < N; i++) {
-            newVel[i] = (newPos[i] - prevPositions[i]) / (2 * dt);
+            newVel[i] = newPos[i].subtract(prevPositions[i])
+                                .divide(BigDecimal.valueOf(2).multiply(dt), MC);
         }
 
         prevPositions = x;
         osc.updateState(newPos, newVel);
-        osc.computeAccelerations(t + dt);
+        osc.computeAccelerations(t.add(dt));
     }
-
 }

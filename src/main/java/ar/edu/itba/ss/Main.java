@@ -3,10 +3,11 @@ package ar.edu.itba.ss;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -17,30 +18,37 @@ import ar.edu.itba.ss.integrators.VerletCoupledIntegrator;
 import ar.edu.itba.ss.integrators.VerletIntegrator;
 
 public class Main {
+    private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
 
     public static void main(String[] args) {
         try {
             String outputDir = Config.OUTPUT_DIR;
-            double dt = Config.DT;
-            double tMax = Config.T_MAX;
-            double dt2 = Config.DT2;
-            double tMax2 = Config.T_MAX2;
+            BigDecimal dt = Config.DT;
+            BigDecimal tMax = Config.T_MAX;
+            BigDecimal dt2 = Config.DT2;
+            BigDecimal tMax2 = Config.T_MAX2;
 
             // Create base output directory
             Files.createDirectories(Paths.get(outputDir));
 
             if (args[0].equals("1")) {
                 try {
-                    dt = Double.parseDouble(args[1]);
+                    dt = new BigDecimal(args[1]);
                 } catch (NumberFormatException e) {
-                    System.out.println("El segundo argumento debe ser un número válido para dt. Usando dt default: " + dt);
+                    System.out.println(
+                            "El segundo argumento debe ser un número válido para dt. Usando dt default: " + dt);
                 }
 
                 String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
                 String directory = String.format(Locale.US, "%s/ej1/%s", outputDir, timestamp);
                 Files.createDirectories(Paths.get(directory));
 
-                Oscillator osc = new Oscillator(Config.M, Config.K, Config.GAMMA, Config.X0, Config.V0);
+                Oscillator osc = new Oscillator(
+                        Config.M,
+                        Config.K,
+                        Config.GAMMA,
+                        Config.X0,
+                        Config.V0);
                 new Simulation(osc, dt, tMax, new VerletIntegrator(), directory + "/output_verlet.txt").run();
                 new Simulation(osc, dt, tMax, new BeemanIntegrator(), directory + "/output_beeman.txt").run();
                 new Simulation(osc, dt, tMax, new Gear5Integrator(), directory + "/output_gear.txt").run();
@@ -54,12 +62,12 @@ public class Main {
                     return;
                 }
 
-                double omega;
-                double k;
+                BigDecimal omega;
+                BigDecimal k;
                 boolean saveAll = false;
                 try {
-                    omega = Double.parseDouble(args[1]);
-                    k = Double.parseDouble(args[2]);
+                    omega = new BigDecimal(args[1]);
+                    k = new BigDecimal(args[2]);
                     if (args.length > 3) {
                         saveAll = Boolean.parseBoolean(args[3]);
                     }
@@ -71,9 +79,16 @@ public class Main {
                 String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
                 String directory = String.format(Locale.US, "%s/ej2/%s", outputDir, timestamp);
                 Files.createDirectories(Paths.get(directory));
-                String filename = directory + "/coupled_omega_" + String.format(Locale.US, "%.4f", omega) + "_k_" + String.format(Locale.US, "%.4f", k) + ".txt";
+                String filename = directory + "/coupled_omega_" + String.format(Locale.US, "%.4f", omega.doubleValue())
+                        +
+                        "_k_" + String.format(Locale.US, "%.4f", k.doubleValue()) + ".txt";
 
-                CoupledOscillators coupledOsc = new CoupledOscillators(Config.N, Config.M2, k, Config.GAMMA2, Config.A2,
+                CoupledOscillators coupledOsc = new CoupledOscillators(
+                        Config.N,
+                        Config.M2,
+                        k,
+                        Config.GAMMA2,
+                        Config.A2,
                         omega);
                 new SimulationCoupled(coupledOsc, dt2, tMax2, new VerletCoupledIntegrator(), filename, saveAll).run();
 
@@ -88,7 +103,7 @@ public class Main {
         }
     }
 
-    private static void saveSingleOscillatorConfig(String outputDir, double dt, double tMax) {
+    private static void saveSingleOscillatorConfig(String outputDir, BigDecimal dt, BigDecimal tMax) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputDir + "/config.json"))) {
             writer.write("{\n");
             writer.write("  \"oscillatorType\": \"single\",\n");
@@ -109,7 +124,8 @@ public class Main {
         }
     }
 
-    private static void saveCoupledOscillatorsConfig(String outputDir, double dt, double tMax, double k, double omega) {
+    private static void saveCoupledOscillatorsConfig(String outputDir, BigDecimal dt, BigDecimal tMax, BigDecimal k,
+            BigDecimal omega) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputDir + "/config.json"))) {
             writer.write("{\n");
             writer.write("  \"oscillatorType\": \"coupled\",\n");

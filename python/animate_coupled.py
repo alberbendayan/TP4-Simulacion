@@ -72,20 +72,22 @@ def main():
         return line, points
 
     # Create animation with fewer frames to make it smoother
-    # frames = min(len(t), 1000)  # Limit to 1000 frames max
-    # frame_indices = np.linspace(0, len(t)-1, frames, dtype=int)
+    frames = min(len(t), 10000)  # Increase number of frames for smoother animation
+    frame_indices = np.linspace(0, len(t)-1, frames, dtype=int)
     
-    anim = FuncAnimation(fig, animate, init_func=init)
+    # Create animation with slower interval (100ms between frames)
+    anim = FuncAnimation(fig, animate, init_func=init, frames=frame_indices,
+                        interval=10, blit=True)
 
     # Create graphics directory in results
     graphics_dir = os.path.join(os.path.dirname(os.path.dirname(sim_dir)), "graphics")
     os.makedirs(graphics_dir, exist_ok=True)
 
-    # Save animation
+    # Save animation with lower fps for slower playback
     timestamp = os.path.basename(sim_dir)
     try:
         anim.save(os.path.join(graphics_dir, f'coupled_oscillator_animation_{timestamp}.mp4'),
-                 writer='ffmpeg', fps=30)
+                 writer='ffmpeg', fps=60)  # Lower fps for slower playback
     except Exception as e:
         print(f"Warning: Could not save animation: {e}")
         print("Showing animation instead...")
