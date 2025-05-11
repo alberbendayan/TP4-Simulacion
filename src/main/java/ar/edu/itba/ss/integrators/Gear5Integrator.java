@@ -15,9 +15,9 @@ public class Gear5Integrator implements Integrator {
         r[0] = x;
         r[1] = v;
         r[2] = osc.acceleration(x, v);
-        r[3] = 0;
-        r[4] = 0;
-        r[5] = 0;
+        r[3] = osc.jerk(x, v);
+        r[4] = osc.snap(x, v);
+        r[5] = osc.crackle(x, v);
     }
 
     public double[] step(double x, double v, double t) {

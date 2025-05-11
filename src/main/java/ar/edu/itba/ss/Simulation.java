@@ -34,7 +34,7 @@ public class Simulation {
 
                 while (t <= tMax) {
                     double analytical = osc.analytical(t);
-                    writer.printf(Locale.US,"%.8f\t%.8f\t%.8f\t%.8f%n", t, x, v, analytical);
+                    writer.printf(Locale.US,"%s\t%s\t%s\t%s%n", t, x, v, analytical);
                     double[] next = integrator.step(x, v, t);
                     x = next[0];
                     v = next[1];

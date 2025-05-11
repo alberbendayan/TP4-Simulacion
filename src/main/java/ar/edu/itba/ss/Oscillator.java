@@ -25,8 +25,20 @@ public class Oscillator {
                 (v0 + gamma_m * x0) / omega_d * Math.sin(omega_d * t));
     }
 
-    public static interface CoupledIntegrator {
-        void initialize(CoupledOscillators osc, double dt);
-        void step(CoupledOscillators osc, double t, double dt);
+    public double jerk(double x, double v) {
+        double a = acceleration(x, v);
+        return (-k * v - gamma * a) / m;
+    }
+
+    public double snap(double x, double v) {
+        double a = acceleration(x, v);
+        double j = jerk(x, v);
+        return (-k * a - gamma * j) / m;
+    }
+
+    public double crackle(double x, double v) {
+        double j = jerk(x, v);
+        double s = snap(x, v);
+        return (-k * j - gamma * s) / m;
     }
 }
