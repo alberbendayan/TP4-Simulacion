@@ -1,6 +1,6 @@
-package ar.edu.itba.ss.integrators;
+package ar.edu.itba.ss.single.integrators;
 
-import ar.edu.itba.ss.Oscillator;
+import ar.edu.itba.ss.single.Oscillator;
 
 public class VerletIntegrator implements Integrator {
 

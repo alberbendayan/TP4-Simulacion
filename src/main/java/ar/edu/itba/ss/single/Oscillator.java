@@ -1,4 +1,4 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.single;
 
 public class Oscillator {
 
@@ -41,4 +41,5 @@ public class Oscillator {
         double s = snap(x, v);
         return (-k * j - gamma * s) / m;
     }
+
 }

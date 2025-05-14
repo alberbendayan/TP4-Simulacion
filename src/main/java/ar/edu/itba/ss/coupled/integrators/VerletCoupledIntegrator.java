@@ -1,6 +1,6 @@
-package ar.edu.itba.ss.integrators;
+package ar.edu.itba.ss.coupled.integrators;
 
-import ar.edu.itba.ss.CoupledOscillators;
+import ar.edu.itba.ss.coupled.CoupledOscillators;
 
 public class VerletCoupledIntegrator implements CoupledIntegrator {
 
@@ -24,12 +24,6 @@ public class VerletCoupledIntegrator implements CoupledIntegrator {
         double[] x = osc.getPositions();
         double[] a = osc.getAccelerations();
         double[] newPos = new double[N];
-
-        // // Depuración: Imprimir las aceleraciones antes de actualizar
-        // System.out.println("Aceleraciones: ");
-        // for (int i = 0; i < N; i++) {
-        //     System.out.println("a[" + i + "] = " + a[i]);
-        // }
 
         for (int i = 0; i < N; i++) {
             newPos[i] = 2 * x[i] - prevPositions[i] + a[i] * dt * dt;

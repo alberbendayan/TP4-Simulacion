@@ -1,6 +1,7 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.coupled;
 
 public class CoupledOscillators {
+
     private final int N;
     private final double m, k, gamma, A, omega;
     private double[] positions, velocities, accelerations;
@@ -55,4 +56,5 @@ public class CoupledOscillators {
     public int getN() {
         return N;
     }
+
 }

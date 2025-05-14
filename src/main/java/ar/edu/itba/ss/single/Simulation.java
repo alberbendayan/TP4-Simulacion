@@ -1,11 +1,8 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.single;
 
-import ar.edu.itba.ss.integrators.Integrator;
+import ar.edu.itba.ss.single.integrators.Integrator;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Locale;
 
 public class Simulation {
@@ -34,7 +31,7 @@ public class Simulation {
 
                 while (t <= tMax) {
                     double analytical = osc.analytical(t);
-                    writer.printf(Locale.US,"%s\t%s\t%s\t%s%n", t, x, v, analytical);
+                    writer.printf(Locale.US, "%s\t%s\t%s\t%s%n", t, x, v, analytical);
                     double[] next = integrator.step(x, v, t);
                     x = next[0];
                     v = next[1];

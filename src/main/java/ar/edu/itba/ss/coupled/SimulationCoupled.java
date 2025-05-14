@@ -1,6 +1,6 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.coupled;
 
-import ar.edu.itba.ss.integrators.CoupledIntegrator;
+import ar.edu.itba.ss.coupled.integrators.CoupledIntegrator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class SimulationCoupled {
     private final boolean saveAll;
 
     public SimulationCoupled(CoupledOscillators osc, double dt, double tMax, CoupledIntegrator integrator,
-            String outputFile, boolean saveAll) {
+                             String outputFile, boolean saveAll) {
         this.osc = osc;
         this.dt = dt;
         this.tMax = tMax;
@@ -62,4 +62,5 @@ public class SimulationCoupled {
             e.printStackTrace();
         }
     }
+
 }
