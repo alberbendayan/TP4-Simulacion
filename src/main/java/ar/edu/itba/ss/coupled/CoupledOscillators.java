@@ -32,7 +32,10 @@ public class CoupledOscillators {
             double vi = velocities[i];
             double yiMinus = (i == 0) ? A * Math.sin(omega * t) : positions[i - 1];
             double yiPlus = (i == N - 1) ? 0.0 : positions[i + 1];
-            accelerations[i] = (-k * (2 * yi - yiMinus - yiPlus) - gamma * vi) / m;
+            
+            // Fi = -k(yi-yi-1) - k(yi-yi+1) - γvi
+            double force = -k * (yi - yiMinus) - k * (yi - yiPlus) - gamma * vi;
+            accelerations[i] = force / m;
         }
     }
 

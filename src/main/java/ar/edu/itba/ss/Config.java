@@ -19,7 +19,7 @@ public class Config {
     public static double M2 = 0.00021;
     public static double GAMMA2 = 0.0003;
     public static double A2 = 1e-2;
-    public static double DT2 = 1e-4;
+    public static double DT2 = 1e-3;
     public static double T_MAX2 = 20.0;
     public static double OMEGA = 2.0;
 

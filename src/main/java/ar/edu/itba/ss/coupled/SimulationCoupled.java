@@ -44,14 +44,14 @@ public class SimulationCoupled {
                     double[] vel = osc.getVelocities();
                     if (saveAll) {
                         // Save time and all particle positions
-                        writer.printf(Locale.US, "%.8f", t);
+                        writer.printf(Locale.US, "%.5f", t);
                         for (int i = 0; i < pos.length; i++) {
-                            writer.printf(Locale.US, "\t%.8f", pos[i]);
+                            writer.printf(Locale.US, "\t%.7f", pos[i]);
                         }
                         writer.println();
                     } else {
                         // Save only time and last particle position
-                        writer.printf(Locale.US, "%.8f\t%.8f\t%.8f%n", t, pos[pos.length - 1], vel[pos.length - 1]);
+                        writer.printf(Locale.US, "%.6f\t%.12f\t%.12f%n", t, pos[pos.length - 1], vel[pos.length - 1]);
                     }
                     integrator.step(osc, t, dt);
                     t += dt;
