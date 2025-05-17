@@ -53,10 +53,10 @@ def get_stationary_amplitude(sim_dir, stationary_time):
         return None, None
 
     # Calculate max amplitudes for stationary state
-    max_amplitudes = np.max(np.abs(positions), axis=1)
+    max_amplitud = np.max(np.abs(positions))
 
     # Return the maximum of maximums in stationary state and the omega value
-    return np.max(max_amplitudes), config["parameters"]["omega"]
+    return max_amplitud, config["parameters"]["omega"]
 
 
 def main():
