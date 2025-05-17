@@ -19,10 +19,12 @@ public class CoupledOscillators {
     }
 
     public void initialize() {
+        // Initially all particles are at rest at their equilibrium positions
         for (int i = 0; i < N; i++) {
             positions[i] = 0.0;
             velocities[i] = 0.0;
         }
+        // Compute initial accelerations based on t=0
         computeAccelerations(0.0);
     }
 
@@ -30,6 +32,9 @@ public class CoupledOscillators {
         for (int i = 0; i < N; i++) {
             double yi = positions[i];
             double vi = velocities[i];
+            
+            // For i=N-1 (last particle), yi+1 is fixed at 0
+            // For i=0 (first particle), yi-1 is the forcing function A*sin(ωt)
             double yiMinus = (i == 0) ? A * Math.sin(omega * t) : positions[i - 1];
             double yiPlus = (i == N - 1) ? 0.0 : positions[i + 1];
             
@@ -40,20 +45,20 @@ public class CoupledOscillators {
     }
 
     public double[] getPositions() {
-        return positions;
+        return positions.clone();
     }
 
     public double[] getVelocities() {
-        return velocities;
+        return velocities.clone();
     }
 
     public double[] getAccelerations() {
-        return accelerations;
+        return accelerations.clone();
     }
 
     public void updateState(double[] newPos, double[] newVel) {
-        this.positions = newPos;
-        this.velocities = newVel;
+        this.positions = newPos.clone();
+        this.velocities = newVel.clone();
     }
 
     public int getN() {

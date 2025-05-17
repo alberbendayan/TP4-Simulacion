@@ -17,7 +17,7 @@ public class Main {
 
         int n = Config.N;
         double m = Config.M2;
-        double k = Config.K;
+        double k = Config.K2;
         double gamma = Config.GAMMA2;
         double a = Config.A2;
         double omega = Config.OMEGA;
