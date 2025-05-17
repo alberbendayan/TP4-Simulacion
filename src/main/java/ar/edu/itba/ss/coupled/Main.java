@@ -37,7 +37,7 @@ public class Main {
 
         saveConfig(outputDir, dt, tMax, k, omega);
 
-        String fileName = String.format("%s/coupled_omega_%s_k_%s.txt", outputDir, omega, k);
+        String fileName = String.format("%s/output.txt", outputDir);
         CoupledOscillators osc = new CoupledOscillators(n, m, k, gamma, a, omega);
         new SimulationCoupled(osc, dt, tMax, new VerletCoupledIntegrator(), fileName, true).run();
     }

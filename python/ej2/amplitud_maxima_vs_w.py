@@ -4,27 +4,20 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils.utils import read_config
+from utils.utils import read_config, save_plot
 
 
 def load_data(filename, stationary_time, dt):
     try:
-        # Calculate the number of lines to skip
+        # Calculamos la cantidad de lineas que se tiene que saltear
         lines_to_skip = int(stationary_time / dt) + 1
 
-        # Load data skipping the initial lines
         data = np.loadtxt(filename, skiprows=lines_to_skip)
-
-        if data.shape[1] == 3:  # Only last particle data
-            print("Warning: Data file only contains last particle position. Cannot analyze full system.")
-            return None, None
-
-        # Check for NaN or Inf values
         if np.any(np.isnan(data)) or np.any(np.isinf(data)):
             print("Error: Data file contains NaN or Inf values")
             return None, None
 
-        return data[:, 0], data[:, 1:]  # time and all positions
+        return data[:, 0], data[:, 1:]  # tiempo y todas las posiciones
 
     except Exception as e:
         print(f"Error loading data file {filename}: {e}")
@@ -32,38 +25,43 @@ def load_data(filename, stationary_time, dt):
 
 
 def get_stationary_amplitude(sim_dir, stationary_time):
-    # Read configuration
     config = read_config(sim_dir)
     dt = config["simulation"]["dt"]
+    omega = config["parameters"]["omega"]
 
-    # Find the data file
-    txt_files = [
-        f
-        for f in os.listdir(sim_dir)
-        if f.endswith(".txt") and f.startswith("coupled_omega_")
-    ]
-    if not txt_files:
-        print(f"No coupled oscillator data files found in {sim_dir}")
+    # La simulación tiene que ser de osciladores acoplados
+    if config["oscillatorType"] != "coupled":
+        print(f"Error: Simulation in {sim_dir} is not a coupled oscillator simulation")
         return None, None
 
-    data_file = os.path.join(sim_dir, txt_files[0])
-    t, positions = load_data(data_file, stationary_time, dt)
+    # Chequeamos si ya se había creado el archivo de máximas amplitudes
+    max_amplitudes_file = os.path.join(sim_dir, "max_amplitudes.txt")
+    if os.path.exists(max_amplitudes_file):
+        data = np.loadtxt(max_amplitudes_file)
+        t = data[:, 0]
+        max_amplitudes = data[:, 1]
 
-    if t is None or positions is None:
-        return None, None
+    # Sino buscamos por archivo de simulación y lo calculamos
+    else:
+        sim_file = "output.txt"
+        data_file = os.path.join(sim_dir, sim_file)
+        t, positions = load_data(data_file, stationary_time, dt)
 
-    # Calculate max amplitudes for stationary state
-    max_amplitud = np.max(np.abs(positions))
+        if t is None or positions is None:
+            return None, None
 
-    # Return the maximum of maximums in stationary state and the omega value
-    return max_amplitud, config["parameters"]["omega"]
+        # Calculamos la máxima amplitud absoluta para cada instante de tiempo
+        max_amplitudes = np.max(np.abs(positions), axis=1)
+
+        # Guardamos las amplitudes máximas junto con el tiempo
+        np.savetxt(max_amplitudes_file, np.column_stack((t, max_amplitudes)))
+
+    return np.max(max_amplitudes), omega
 
 
 def main():
     if len(sys.argv) < 3:
-        print(
-            "Usage: python compare_stationary_amplitudes.py <stationary_time> <sim_dir1> [sim_dir2 sim_dir3 ...]"
-        )
+        print("Usage: python compare_stationary_amplitudes.py <stationary_time> <sim_dir1> [sim_dir2 sim_dir3 ...]")
         sys.exit(1)
 
     try:
@@ -75,7 +73,6 @@ def main():
 
     sim_dirs = sys.argv[2:]
 
-    # Collect data from all simulations
     amplitudes = []
     omegas = []
 
@@ -90,36 +87,20 @@ def main():
         print("Error: No valid data found in any simulation directory")
         sys.exit(1)
 
-    # Sort by omega for better visualization
+    # Ordenamos los datos por omega
     sorted_indices = np.argsort(omegas)
     omegas = np.array(omegas)[sorted_indices]
     amplitudes = np.array(amplitudes)[sorted_indices]
 
-    # Create the plot
-    plt.figure(figsize=(12, 6))
-    plt.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8)
 
-    # Set up the plot
-    plt.xlabel("ω [rad/s]")
-    plt.ylabel("Maximum Amplitude in Stationary State [m]")
-    plt.title(
-        f"Stationary State Maximum Amplitude vs ω\n(Stationary time ≥ {stationary_time}s)"
-    )
-    plt.grid(True)
+    ax.set_xlabel("ω [rad/s]")
+    ax.set_ylabel("Amplitud máxima absoluta |y| [m]")
+    ax.grid(True, linestyle="--", alpha=0.7)
 
-    # Create graphics directory
-    graphics_dir = os.path.join(
-        os.path.dirname(os.path.dirname(sim_dirs[0])), "graphics"
-    )
-    os.makedirs(graphics_dir, exist_ok=True)
-
-    # Save the plot
-    plt.savefig(
-        os.path.join(graphics_dir, "amplitud_maxima_vs_w.png"),
-        dpi=300,
-        bbox_inches="tight",
-    )
-    print(f"Plot saved to {graphics_dir}/amplitud_maxima_vs_w.png")
+    plot_path = os.path.join(sim_dirs[0], "amplitud_maxima_vs_w.png")
+    save_plot(fig, plot_path)
     plt.show()
 
 

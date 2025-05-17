@@ -10,3 +10,6 @@ dependencies = [
     "pyside6>=6.9.0",
     "scipy>=1.15.2",
 ]
+
+[tool.black]
+line-length = 140
