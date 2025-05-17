@@ -19,11 +19,11 @@ public class Config {
     public static double M2 = 0.00021;  // 0.21g -> kg
     public static double K2 = 102.3;    // kg/s²
     public static double GAMMA2 = 0.0003;  // 0.3g/s -> kg/s
-    public static double A2 = 1e-2;     // m
-    public static double L0 = 1e-3;     // m
-    public static double DT2 = 1e-3;    //
+    public static double A2 = 0.01;     // m
+    public static double L0 = 0.001;     // m
+    public static double DT2 = 1e-4;
     public static double T_MAX2 = 20.0; // s
-    public static double OMEGA = 2.0;   // rad/s
+    public static double OMEGA = 6.0 * Math.PI;   // rad/s
 
     public static void parseArguments(String[] args) {
 

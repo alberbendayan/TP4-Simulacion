@@ -44,9 +44,9 @@ public class SimulationCoupled {
                     double[] vel = osc.getVelocities();
                     if (saveAll) {
                         // Save time and all particle positions
-                        writer.printf(Locale.US, "%.5f", t);
-                        for (int i = 0; i < pos.length; i++) {
-                            writer.printf(Locale.US, "\t%.7f", pos[i]);
+                        writer.printf(Locale.US, "%s", t);
+                        for (double po : pos) {
+                            writer.printf(Locale.US, "\t%s", po);
                         }
                         writer.println();
                     } else {

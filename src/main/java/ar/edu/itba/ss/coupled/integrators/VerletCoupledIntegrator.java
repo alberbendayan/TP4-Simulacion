@@ -41,7 +41,7 @@ public class VerletCoupledIntegrator implements CoupledIntegrator {
         
         // Update state and compute new accelerations
         osc.updateState(newPos, newVel);
-        osc.computeAccelerations(t - dt);
+        osc.computeAccelerations(t + dt);
     }
 
 }
