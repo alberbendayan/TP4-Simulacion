@@ -4,29 +4,28 @@ public class Config {
 
     // Simulation parameters
     public static String OUTPUT_DIR = "results";
-    public static double DT = 0.01;
-    public static double T_MAX = 5;
 
     // Single oscillator parameters
-    public static double M = 70.0;
-    public static double K = 1e4;
-    public static double GAMMA = 100.0;
-    public static double X0 = 1.0;
-    public static double V0 = -X0 * GAMMA / (2 * M);
+    public static double SINGLE_M = 70.0;
+    public static double SINGLE_K = 1e4;
+    public static double SINGLE_GAMMA = 100.0;
+    public static double SINGLE_X0 = 1.0;
+    public static double SINGLE_V0 = -SINGLE_X0 * SINGLE_GAMMA / (2 * SINGLE_M);
+    public static double SINGLE_DT = 0.01;
+    public static double SINGLE_T_MAX = 5.0;
 
     // Coupled oscillators parameters
-    public static int N = 1000;
-    public static double M2 = 0.00021;  // 0.21g -> kg
-    public static double K2 = 102.3;    // kg/s²
-    public static double GAMMA2 = 0.0003;  // 0.3g/s -> kg/s
-    public static double A2 = 0.01;     // m
-    public static double L0 = 0.001;     // m
-    public static double DT2 = 1e-4;
-    public static double T_MAX2 = 20.0; // s
-    public static double OMEGA = 6.0 * Math.PI;   // rad/s
+    public static int COUPLED_N = 1000;
+    public static double COUPLED_M = 0.00021;
+    public static double COUPLED_K = 102.3;
+    public static double COUPLED_GAMMA = 0.0003;
+    public static double COUPLED_A = 0.01;
+    public static double COUPLED_L0 = 0.001;
+    public static double COUPLED_DT = 1e-4;
+    public static double COUPLED_T_MAX = 20.0;
+    public static double COUPLED_OMEGA = 2.0 * Math.PI;
 
     public static void parseArguments(String[] args) {
-
         for (String arg : args) {
             String[] parts = arg.split("=");
             if (parts.length != 2) {
@@ -40,7 +39,8 @@ public class Config {
             switch (key) {
                 case "DT":
                     try {
-                        Config.DT = Double.parseDouble(value);
+                        Config.SINGLE_DT = Double.parseDouble(value);
+                        Config.COUPLED_DT = Config.SINGLE_DT;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for dt: " + value);
                     }
@@ -48,7 +48,8 @@ public class Config {
 
                 case "T_MAX":
                     try {
-                        Config.T_MAX = Double.parseDouble(value);
+                        Config.SINGLE_T_MAX = Double.parseDouble(value);
+                        Config.COUPLED_T_MAX = Config.SINGLE_T_MAX;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for tMax: " + value);
                     }
@@ -56,7 +57,8 @@ public class Config {
 
                 case "M":
                     try {
-                        Config.M = Double.parseDouble(value);
+                        Config.SINGLE_M = Double.parseDouble(value);
+                        Config.COUPLED_M = Config.SINGLE_M;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for M: " + value);
                     }
@@ -64,7 +66,8 @@ public class Config {
 
                 case "K":
                     try {
-                        Config.K = Double.parseDouble(value);
+                        Config.SINGLE_K = Double.parseDouble(value);
+                        Config.COUPLED_K = Config.SINGLE_K;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for K: " + value);
                     }
@@ -72,7 +75,8 @@ public class Config {
 
                 case "GAMMA":
                     try {
-                        Config.GAMMA = Double.parseDouble(value);
+                        Config.SINGLE_GAMMA = Double.parseDouble(value);
+                        Config.COUPLED_GAMMA = Config.SINGLE_GAMMA;
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for gamma: " + value);
                     }
@@ -80,7 +84,7 @@ public class Config {
 
                 case "X0":
                     try {
-                        Config.X0 = Double.parseDouble(value);
+                        Config.SINGLE_X0 = Double.parseDouble(value);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for x0: " + value);
                     }
@@ -88,7 +92,7 @@ public class Config {
 
                 case "V0":
                     try {
-                        Config.V0 = Double.parseDouble(value);
+                        Config.SINGLE_V0 = Double.parseDouble(value);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for v0: " + value);
                     }
@@ -96,7 +100,7 @@ public class Config {
 
                 case "OMEGA":
                     try {
-                        Config.OMEGA = Double.parseDouble(value);
+                        Config.COUPLED_OMEGA = Double.parseDouble(value);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid value for omega: " + value);
                     }

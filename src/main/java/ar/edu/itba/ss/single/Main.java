@@ -17,13 +17,13 @@ public class Main {
     public static void main(String[] args) {
         Config.parseArguments(args);
 
-        double dt = Config.DT;
-        double tMax = Config.T_MAX;
-        double m = Config.M;
-        double k = Config.K;
-        double gamma = Config.GAMMA;
-        double x0 = Config.X0;
-        double v0 = Config.V0;
+        double dt = Config.SINGLE_DT;
+        double tMax = Config.SINGLE_T_MAX;
+        double m = Config.SINGLE_M;
+        double k = Config.SINGLE_K;
+        double gamma = Config.SINGLE_GAMMA;
+        double x0 = Config.SINGLE_X0;
+        double v0 = Config.SINGLE_V0;
 
         String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
         String outputDir = String.format("%s/ej1/%s", Config.OUTPUT_DIR, timestamp);
@@ -53,11 +53,11 @@ public class Main {
             writer.write("    \"tMax\": " + tMax + "\n");
             writer.write("  },\n");
             writer.write("  \"parameters\": {\n");
-            writer.write("    \"m\": " + Config.M + ",\n");
-            writer.write("    \"k\": " + Config.K + ",\n");
-            writer.write("    \"gamma\": " + Config.GAMMA + ",\n");
-            writer.write("    \"x0\": " + Config.X0 + ",\n");
-            writer.write("    \"v0\": " + Config.V0 + "\n");
+            writer.write("    \"m\": " + Config.SINGLE_M + ",\n");
+            writer.write("    \"k\": " + Config.SINGLE_K + ",\n");
+            writer.write("    \"gamma\": " + Config.SINGLE_GAMMA + ",\n");
+            writer.write("    \"x0\": " + Config.SINGLE_X0 + ",\n");
+            writer.write("    \"v0\": " + Config.SINGLE_V0 + "\n");
             writer.write("  }\n");
             writer.write("}\n");
         } catch (IOException e) {

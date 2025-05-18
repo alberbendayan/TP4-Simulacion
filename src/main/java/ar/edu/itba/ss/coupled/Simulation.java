@@ -1,6 +1,6 @@
 package ar.edu.itba.ss.coupled;
 
-import ar.edu.itba.ss.coupled.integrators.CoupledIntegrator;
+import ar.edu.itba.ss.coupled.integrators.Integrator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,22 +10,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
-public class SimulationCoupled {
+public class Simulation {
 
-    private final CoupledOscillators osc;
+    private final Oscillator osc;
     private final double dt, tMax;
-    private final CoupledIntegrator integrator;
+    private final Integrator integrator;
     private final String outputFile;
-    private final boolean saveAll;
 
-    public SimulationCoupled(CoupledOscillators osc, double dt, double tMax, CoupledIntegrator integrator,
-                             String outputFile, boolean saveAll) {
+    public Simulation(Oscillator osc, double dt, double tMax, Integrator integrator, String outputFile) {
         this.osc = osc;
         this.dt = dt;
         this.tMax = tMax;
         this.integrator = integrator;
         this.outputFile = outputFile;
-        this.saveAll = saveAll;
     }
 
     public void run() {
@@ -41,18 +38,13 @@ public class SimulationCoupled {
 
                 while (t <= tMax) {
                     double[] pos = osc.getPositions();
-                    double[] vel = osc.getVelocities();
-                    if (saveAll) {
-                        // Save time and all particle positions
-                        writer.printf(Locale.US, "%s", t);
-                        for (double po : pos) {
-                            writer.printf(Locale.US, "\t%s", po);
-                        }
-                        writer.println();
-                    } else {
-                        // Save only time and last particle position
-                        writer.printf(Locale.US, "%.6f\t%.12f\t%.12f%n", t, pos[pos.length - 1], vel[pos.length - 1]);
-                    }
+
+                    // Save time and all particle positions
+                    writer.printf(Locale.US, "%s", t);
+                    for (double po : pos)
+                        writer.printf(Locale.US, "\t%s", po);
+                    writer.println();
+
                     integrator.step(osc, t, dt);
                     t += dt;
                 }

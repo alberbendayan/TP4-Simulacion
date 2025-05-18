@@ -23,11 +23,11 @@ def main():
         t, data = load_data(os.path.join(sim_dir, archivo))
         ax.plot(t, data[:, 0], label=nombre, color=COLORES[nombre])
 
-    ax.plot(t, data[:, 1], label="Analítica", color="blue", linewidth=2)
+    ax.plot(t, data[:, 2], label="Analítica", color="blue", linewidth=4, zorder=0, alpha=0.5)
 
     ax.set_xlabel("Tiempo [s]")
     ax.set_ylabel("Posición [m]")
-    ax.legend()
+    ax.legend(loc="upper right")
     ax.grid(True, linestyle="--", alpha=0.7)
 
     plot_path = os.path.join(sim_dir, "comparacion_metodos.png")

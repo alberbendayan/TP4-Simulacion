@@ -1,12 +1,12 @@
 package ar.edu.itba.ss.coupled;
 
-public class CoupledOscillators {
+public class Oscillator {
 
     private final int N;
     private final double m, k, gamma, A, omega;
     private double[] positions, velocities, accelerations;
 
-    public CoupledOscillators(int N, double m, double k, double gamma, double A, double omega) {
+    public Oscillator(int N, double m, double k, double gamma, double A, double omega) {
         this.N = N;
         this.m = m;
         this.k = k;

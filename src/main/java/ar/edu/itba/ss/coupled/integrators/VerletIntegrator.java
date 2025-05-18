@@ -1,13 +1,13 @@
 package ar.edu.itba.ss.coupled.integrators;
 
-import ar.edu.itba.ss.coupled.CoupledOscillators;
+import ar.edu.itba.ss.coupled.Oscillator;
 
-public class VerletCoupledIntegrator implements CoupledIntegrator {
+public class VerletIntegrator implements Integrator {
 
     private double[] prevPositions;
 
     @Override
-    public void initialize(CoupledOscillators osc, double dt) {
+    public void initialize(Oscillator osc, double dt) {
         int N = osc.getN();
         double[] x = osc.getPositions();  // Already a clone
         double[] v = osc.getVelocities();  // Already a clone
@@ -19,7 +19,7 @@ public class VerletCoupledIntegrator implements CoupledIntegrator {
     }
 
     @Override
-    public void step(CoupledOscillators osc, double t, double dt) {
+    public void step(Oscillator osc, double t, double dt) {
         int N = osc.getN();
         double[] x = osc.getPositions();  // Already a clone
         double[] a = osc.getAccelerations();  // Already a clone

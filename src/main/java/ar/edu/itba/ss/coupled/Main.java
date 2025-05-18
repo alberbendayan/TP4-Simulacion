@@ -1,7 +1,7 @@
 package ar.edu.itba.ss.coupled;
 
 import ar.edu.itba.ss.Config;
-import ar.edu.itba.ss.coupled.integrators.VerletCoupledIntegrator;
+import ar.edu.itba.ss.coupled.integrators.VerletIntegrator;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,15 +15,15 @@ public class Main {
     public static void main(String[] args) {
         Config.parseArguments(args);
 
-        int n = Config.N;
-        double m = Config.M2;
-        double k = Config.K2;
-        double gamma = Config.GAMMA2;
-        double a = Config.A2;
-        double omega = Config.OMEGA;
+        int n = Config.COUPLED_N;
+        double m = Config.COUPLED_M;
+        double k = Config.COUPLED_K;
+        double gamma = Config.COUPLED_GAMMA;
+        double a = Config.COUPLED_A;
+        double omega = Config.COUPLED_OMEGA;
 
-        double dt = Config.DT2;
-        double tMax = Config.T_MAX2;
+        double dt = Config.COUPLED_DT;
+        double tMax = Config.COUPLED_T_MAX;
 
         String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
         String outputDir = String.format("%s/ej2/%s", Config.OUTPUT_DIR, timestamp);
@@ -38,8 +38,8 @@ public class Main {
         saveConfig(outputDir, dt, tMax, k, omega);
 
         String fileName = String.format("%s/output.txt", outputDir);
-        CoupledOscillators osc = new CoupledOscillators(n, m, k, gamma, a, omega);
-        new SimulationCoupled(osc, dt, tMax, new VerletCoupledIntegrator(), fileName, true).run();
+        Oscillator osc = new Oscillator(n, m, k, gamma, a, omega);
+        new Simulation(osc, dt, tMax, new VerletIntegrator(), fileName).run();
     }
 
     private static void saveConfig(String outputDir, double dt, double tMax, double k, double omega) {
@@ -51,11 +51,11 @@ public class Main {
             writer.write("    \"tMax\": " + tMax + "\n");
             writer.write("  },\n");
             writer.write("  \"parameters\": {\n");
-            writer.write("    \"N\": " + Config.N + ",\n");
-            writer.write("    \"m\": " + Config.M2 + ",\n");
+            writer.write("    \"N\": " + Config.COUPLED_N + ",\n");
+            writer.write("    \"m\": " + Config.COUPLED_M + ",\n");
             writer.write("    \"k\": " + k + ",\n");
-            writer.write("    \"gamma\": " + Config.GAMMA2 + ",\n");
-            writer.write("    \"A\": " + Config.A2 + ",\n");
+            writer.write("    \"gamma\": " + Config.COUPLED_GAMMA + ",\n");
+            writer.write("    \"A\": " + Config.COUPLED_A + ",\n");
             writer.write("    \"omega\": " + omega + "\n");
             writer.write("  }\n");
             writer.write("}\n");

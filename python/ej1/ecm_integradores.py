@@ -22,7 +22,7 @@ def main():
 
     for nombre, archivo in ARCHIVOS.items():
         _, data = load_data(os.path.join(sim_dir, archivo))
-        ecm = mce(data[0], data[1])
+        ecm = mce(data[:, 0], data[:, 2])
         ecms.append(ecm)
 
     fig, ax = plt.subplots(figsize=(12, 6))
