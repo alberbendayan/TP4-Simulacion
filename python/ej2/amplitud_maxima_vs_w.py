@@ -4,24 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils.utils import read_config, save_plot
-
-
-def load_data(filename, stationary_time, dt):
-    try:
-        # Calculamos la cantidad de lineas que se tiene que saltear
-        lines_to_skip = int(stationary_time / dt) + 1
-
-        data = np.loadtxt(filename, skiprows=lines_to_skip)
-        if np.any(np.isnan(data)) or np.any(np.isinf(data)):
-            print("Error: Data file contains NaN or Inf values")
-            return None, None
-
-        return data[:, 0], data[:, 1:]  # tiempo y todas las posiciones
-
-    except Exception as e:
-        print(f"Error loading data file {filename}: {e}")
-        return None, None
+from utils.utils import load_data, read_config, save_plot
 
 
 def get_stationary_amplitude(sim_dir, stationary_time):

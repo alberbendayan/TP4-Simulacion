@@ -4,21 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils.utils import read_config, save_plot, validate_simulation_dir
-
-
-def load_data(filename):
-    try:
-        data = np.loadtxt(filename)
-        if np.any(np.isnan(data)) or np.any(np.isinf(data)):
-            print("Error: Data file contains NaN or Inf values")
-            return None, None
-
-        return data[:, 0], data[:, 1:]  # tiempo y todas las posiciones
-
-    except Exception as e:
-        print(f"Error loading data file {filename}: {e}")
-        return None, None
+from utils.utils import load_data, read_config, save_plot, validate_simulation_dir
 
 
 def main():
