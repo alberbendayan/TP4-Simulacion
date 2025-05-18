@@ -32,7 +32,7 @@ def main():
     # ks = np.array(ks)
 
     ks = np.array([102.3, 500, 1000, 5000, 8000, 10000])
-    w0s = np.array([1.94, 4.78, 6.8, 15.3, 19.36, 21.6])
+    w0s = np.array([1.94, 4.78, 6.8, 15.3, 19.35, 21.6])
 
     # Fit: w0 = C * sqrt(k)
     def fit_func(k, c):
