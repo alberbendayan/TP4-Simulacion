@@ -106,6 +106,14 @@ public class Config {
                     }
                     break;
 
+                case "N":
+                    try {
+                        Config.COUPLED_N = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                            System.out.println("Invalid value for N: " + value);
+                    }
+                    break;
+
                 default:
                     System.out.println("Unknown argument: " + key);
             }

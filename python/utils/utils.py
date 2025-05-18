@@ -33,9 +33,14 @@ def save_plot(fig, filepath):
     print(f"Plot saved to {filepath}")
 
 
-def load_data(filename):
+def load_data(filename, stationary_time=None, dt=None):
     try:
-        data = np.loadtxt(filename)
+        if stationary_time is not None and dt is not None:
+            lines_to_skip = int(stationary_time / dt)
+            data = np.loadtxt(filename, skiprows=lines_to_skip)
+        else:
+            data = np.loadtxt(filename)
+
         if np.any(np.isnan(data)) or np.any(np.isinf(data)):
             print("Error: Data file contains NaN or Inf values")
             return None, None

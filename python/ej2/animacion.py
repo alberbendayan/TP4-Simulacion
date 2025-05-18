@@ -47,8 +47,8 @@ def main():
         margin = 0.1
 
     ax.set_ylim(y_min - margin, y_max + margin)
-    ax.set_xlabel("Particle Index")
-    ax.set_ylabel("Position [m]")
+    ax.set_xlabel("Partícula")
+    ax.set_ylabel("Posición [m]")
     ax.grid(True, linestyle="--", alpha=0.7)
 
     def init():

@@ -8,6 +8,7 @@ dependencies = [
     "matplotlib>=3.10.1",
     "numpy>=2.2.5",
     "pyside6>=6.9.0",
+    "scipy>=1.15.3",
 ]
 
 [tool.black]
