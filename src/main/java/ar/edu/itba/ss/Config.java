@@ -110,7 +110,7 @@ public class Config {
                     try {
                         Config.COUPLED_N = Integer.parseInt(value);
                     } catch (NumberFormatException e) {
-                            System.out.println("Invalid value for N: " + value);
+                        System.out.println("Invalid value for N: " + value);
                     }
                     break;
 

@@ -15,21 +15,24 @@ def extract_w0_k(sim_dir):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python w0_vs_k.py <sim_dir1> [sim_dir2 sim_dir3 ...]")
-        sys.exit(1)
+    # if len(sys.argv) < 2:
+    #     print("Usage: python w0_vs_k.py <sim_dir1> [sim_dir2 sim_dir3 ...]")
+    #     sys.exit(1)
 
-    sim_dirs = sys.argv[1:]
-    w0s = []
-    ks = []
+    # sim_dirs = sys.argv[1:]
+    # w0s = []
+    # ks = []
 
-    for sim_dir in sim_dirs:
-        w0, k = extract_w0_k(sim_dir)
-        w0s.append(w0)
-        ks.append(k)
+    # for sim_dir in sim_dirs:
+    #     w0, k = extract_w0_k(sim_dir)
+    #     w0s.append(w0)
+    #     ks.append(k)
 
-    w0s = np.array(w0s)
-    ks = np.array(ks)
+    # w0s = np.array(w0s)
+    # ks = np.array(ks)
+
+    ks = np.array([102.3, 500, 1000, 5000, 8000, 10000])
+    w0s = np.array([1.94, 4.78, 6.8, 15.3, 19.36, 21.6])
 
     # Fit: w0 = C * sqrt(k)
     def fit_func(k, c):

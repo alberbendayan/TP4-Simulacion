@@ -75,12 +75,22 @@ def main():
     omegas = np.array(omegas)[sorted_indices]
     amplitudes = np.array(amplitudes)[sorted_indices]
 
+    # Encontrar el punto máximo
+    max_idx = np.argmax(amplitudes)
+    max_omega = omegas[max_idx]
+    max_amplitude = amplitudes[max_idx]
+
     fig, ax = plt.subplots(figsize=(12, 6))
-    ax.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8)
+    ax.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8, label='Amplitud vs ω')
+    
+    # Marcar el punto máximo en rojo
+    ax.plot(max_omega, max_amplitude, 'ro', markersize=10, 
+            label=f'Máximo (ω={max_omega:.2f})')
 
     ax.set_xlabel("ω [rad/s]")
     ax.set_ylabel("Amplitud máxima absoluta |y| [m]")
     ax.grid(True, linestyle="--", alpha=0.7)
+    ax.legend()
 
     plot_path = os.path.join(sim_dirs[0], "amplitud_maxima_vs_w.png")
     save_plot(fig, plot_path)
