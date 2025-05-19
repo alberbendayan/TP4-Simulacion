@@ -9,7 +9,6 @@ from utils.utils import load_data, read_config, save_plot
 
 def get_stationary_amplitude(sim_dir, stationary_time):
     config = read_config(sim_dir)
-    dt = config["simulation"]["dt"]
     omega = config["parameters"]["omega"]
 
     # La simulación tiene que ser de osciladores acoplados
@@ -28,7 +27,7 @@ def get_stationary_amplitude(sim_dir, stationary_time):
     else:
         sim_file = "output.txt"
         data_file = os.path.join(sim_dir, sim_file)
-        t, positions = load_data(data_file, stationary_time, dt)
+        t, positions = load_data(data_file)
 
         if t is None or positions is None:
             return None, None
@@ -38,6 +37,15 @@ def get_stationary_amplitude(sim_dir, stationary_time):
 
         # Guardamos las amplitudes máximas junto con el tiempo
         np.savetxt(max_amplitudes_file, np.column_stack((t, max_amplitudes)))
+
+    # Descartamos los tiempos que no son estacionarios
+    stationary_indices = np.where(t >= stationary_time)[0]
+    if len(stationary_indices) == 0:
+        print(f"Error: No stationary data found in {sim_dir}")
+        return None, None
+
+    t = t[stationary_indices]
+    max_amplitudes = max_amplitudes[stationary_indices]
 
     return np.max(max_amplitudes), omega
 
@@ -81,11 +89,10 @@ def main():
     max_amplitude = amplitudes[max_idx]
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    ax.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8, label='Amplitud vs ω')
-    
+    ax.plot(omegas, amplitudes, "bo-", linewidth=2, markersize=8, label="Amplitud vs ω")
+
     # Marcar el punto máximo en rojo
-    ax.plot(max_omega, max_amplitude, 'ro', markersize=10, 
-            label=f'Máximo (ω={max_omega:.2f})')
+    ax.plot(max_omega, max_amplitude, "ro", markersize=10, label=f"Máximo (ω={max_omega:.2f})")
 
     ax.set_xlabel("ω [rad/s]")
     ax.set_ylabel("Amplitud máxima absoluta |y| [m]")

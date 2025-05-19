@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
+
 from utils.utils import read_config, save_plot
 
 
@@ -47,10 +48,10 @@ def main():
 
     fig, ax = plt.subplots(figsize=(10, 6))
     k_fit = np.linspace(0, ks.max() * 1.05, 200)
-    ax.plot(k_fit, fit_func(k_fit, c_fit), "r--", label=f"Fit: ω₀ = {c_fit:.3f}·√k")
+    ax.plot(k_fit, fit_func(k_fit, c_fit), "r--", label=f"Ajuste: ω₀ = {c_fit:.3f}·√k")
     ax.plot(ks, w0s, "o", label="ω₀ simulada")
-    ax.set_xlabel("k (kg/s²)")
-    ax.set_ylabel("ω₀ (rad/s)")
+    ax.set_xlabel("k [kg/s²]")
+    ax.set_ylabel("ω₀ [rad/s]")
     ax.legend()
     ax.grid(True, linestyle="--", alpha=0.7)
 
@@ -60,7 +61,7 @@ def main():
 
     # Rango de valores de c alrededor del ajuste
     c_values = np.linspace(c_fit * 0.5, c_fit * 1.5, 500)
-    errors = [np.sum((w0s - fit_func(ks, c))**2) for c in c_values]
+    errors = [np.sum((w0s - fit_func(ks, c)) ** 2) for c in c_values]
     errors = np.array(errors)
 
     # Encontramos el mínimo (debería ser en c_fit)
@@ -69,14 +70,13 @@ def main():
     E_star = errors[min_idx]
 
     fig, ax = plt.subplots(figsize=(8, 6))
-    ax.plot(c_values, errors, 'b-', label='E(c)')
-    ax.axvline(c_star, color='r', linestyle='--')
-    ax.plot(c_star, E_star, 'ro', label=f'Mínimo: c* = {c_star:.3f}')
-    ax.set_xlabel('c')
-    ax.set_ylabel('E(c)')
-    ax.set_title('Error del ajuste E(c) en función de c')
+    ax.plot(c_values, errors, "b-", label="E(C)")
+    ax.axvline(c_star, color="r", linestyle="--")
+    ax.plot(c_star, E_star, "ro", label=f"Mínimo: c* = {c_star:.3f}")
+    ax.set_xlabel("C")
+    ax.set_ylabel("E(C)")
     ax.legend()
-    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.grid(True, linestyle="--", alpha=0.7)
     plot_path = os.path.join("plots", "w_vs_k_error.png")
     save_plot(fig, plot_path)
     plt.show()
